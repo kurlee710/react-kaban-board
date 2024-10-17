@@ -15,8 +15,18 @@ class AuthService {
     return !!token && !this.isTokenExpired(token);
   }
 
-  isTokenExpired(token: string) {
-    // TODO: return a value that indicates if the token is expired
+  isTokenExpired(token: string): boolean {
+    try {
+      const decoded = jwtDecode<JwtPayload & { exp: number }>(token);
+      if (decoded.exp) {
+        const currentTime = Math.floor(Date.now() / 1000); // Current time in seconds
+        return decoded.exp < currentTime; // Check if token has expired
+      }
+      return false; // If no expiration field, assume it's valid
+    } catch (error) {
+      console.error("Invalid token:", error);
+      return true; // Treat invalid token as expired
+    }
   }
 
   getToken(): string {
