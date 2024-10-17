@@ -1,7 +1,7 @@
-import { Router, Request, Response } from 'express';
-import { User } from '../models/user.js';
-import jwt from 'jsonwebtoken';
-import bcrypt from 'bcrypt';
+import { Router, Request, Response } from "express";
+import { User } from "../models/user.js";
+import jwt from "jsonwebtoken";
+import bcrypt from "bcrypt";
 
 export const login = async (req: Request, res: Response) => {
   // TODO: If the user exists and the password is correct, return a JWT token
@@ -20,7 +20,6 @@ export const login = async (req: Request, res: Response) => {
       return res.status(401).json({ message: "Invalid credentials." });
     }
 
-
     // Generate a JWT token if credentials are valid
     const token = jwt.sign(
       { username: user.username }, // Payload
@@ -28,11 +27,17 @@ export const login = async (req: Request, res: Response) => {
       { expiresIn: "1h" } // Token expiration time
     );
 
+    // Return the JWT token to the client
+    return res.json({ token });
+  } catch (error) {
+    console.error("Error during login:", error);
+    return res.status(500).json({ message: "Internal server error." });
+  }
 };
 
 const router = Router();
 
 // POST /login - Login a user
-router.post('/login', login);
+router.post("/login", login);
 
 export default router;
