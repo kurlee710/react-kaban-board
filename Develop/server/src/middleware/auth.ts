@@ -19,4 +19,15 @@ export const authenticateToken = (
       .status(401)
       .json({ message: "Access denied. No token provided." });
   }
+
+  jwt.verify(token, process.env.JWT_SECRET as string, (err, decoded) => {
+    if (err) {
+      return res.status(403).json({ message: "Invalid or expired token." });
+    }
+
+    req.user = decoded as JwtPayload; // Attach user info to the request object
+    next(); // Pass control to the next middleware/route handler
+    return;
+  });
+  return;
 };
