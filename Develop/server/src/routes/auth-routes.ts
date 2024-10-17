@@ -19,6 +19,15 @@ export const login = async (req: Request, res: Response) => {
     if (!isPasswordValid) {
       return res.status(401).json({ message: "Invalid credentials." });
     }
+
+
+    // Generate a JWT token if credentials are valid
+    const token = jwt.sign(
+      { username: user.username }, // Payload
+      process.env.JWT_SECRET as string, // Secret key
+      { expiresIn: "1h" } // Token expiration time
+    );
+
 };
 
 const router = Router();
