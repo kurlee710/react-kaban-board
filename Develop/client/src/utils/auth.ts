@@ -9,8 +9,10 @@ class AuthService {
     return null;
   }
 
-  loggedIn() {
-    // TODO: return a value that indicates if the user is logged in
+  loggedIn(): boolean {
+    const token = this.getToken();
+    // Check if token exists and is not expired
+    return !!token && !this.isTokenExpired(token);
   }
 
   isTokenExpired(token: string) {
