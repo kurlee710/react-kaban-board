@@ -1,14 +1,18 @@
-import { JwtPayload, jwtDecode } from 'jwt-decode';
+import { JwtPayload, jwtDecode } from "jwt-decode";
 
 class AuthService {
-  getProfile() {
-    // TODO: return the decoded token
+  getProfile(): JwtPayload | null {
+    const token = this.getToken();
+    if (token) {
+      return jwtDecode<JwtPayload>(token); // Decode the JWT token
+    }
+    return null;
   }
 
   loggedIn() {
     // TODO: return a value that indicates if the user is logged in
   }
-  
+
   isTokenExpired(token: string) {
     // TODO: return a value that indicates if the token is expired
   }
