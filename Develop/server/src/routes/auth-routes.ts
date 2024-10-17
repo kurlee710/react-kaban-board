@@ -13,6 +13,12 @@ export const login = async (req: Request, res: Response) => {
     if (!user) {
       return res.status(404).json({ message: "User not found." });
     }
+
+    // Compare the provided password with the hashed password in the database
+    const isPasswordValid = await bcrypt.compare(password, user.password);
+    if (!isPasswordValid) {
+      return res.status(401).json({ message: "Invalid credentials." });
+    }
 };
 
 const router = Router();
